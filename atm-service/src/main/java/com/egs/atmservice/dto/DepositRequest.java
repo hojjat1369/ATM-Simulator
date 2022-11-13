@@ -11,9 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DepositRequest {
+public class DepositRequest extends AccountRequest {
 
 	private Long amount;
-	private Long cardNumber;
 
 }

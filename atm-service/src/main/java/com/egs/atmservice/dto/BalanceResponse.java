@@ -15,6 +15,5 @@ public class BalanceResponse {
 
 	private Long balance;
 	private Long accountId;
-	private Long cardNumber;
 
 }

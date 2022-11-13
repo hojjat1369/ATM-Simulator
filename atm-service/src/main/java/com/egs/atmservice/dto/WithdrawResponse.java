@@ -15,6 +15,5 @@ public class WithdrawResponse {
 
 	private Long balance;
 	private Long withdrawnAmount;
-	private Long cardNumber;
 
 }

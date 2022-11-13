@@ -4,6 +4,7 @@ package com.egs.atmservice.common.util;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
+import com.egs.atmservice.common.exception.DomainException;
 import com.egs.atmservice.dto.AuthenticateCardRequest;
 import com.egs.atmservice.dto.BalanceRequest;
 import com.egs.atmservice.dto.BalanceResponse;
@@ -72,5 +73,10 @@ public class BankServiceGatewayImpl {
 	private String getBalanceUrl() {
 
 		return BASE_URL + "/account/balance";
+	}
+
+	public void failed() throws DomainException {
+
+		throw new DomainException(ErrorMessage.BANK_ID_DOWN);
 	}
 }

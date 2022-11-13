@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.egs.bankservice.common.aspect.Logging;
@@ -45,6 +46,7 @@ public class AccountController {
 
 	@GetMapping
 	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
 	public List<AccountResponse> getAccounts() {
 
 		return accountService.getAccounts();
@@ -53,6 +55,7 @@ public class AccountController {
 	@Logging
 	@PostMapping("/withdraw")
 	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
 	public WithdrawResponse withdraw(@RequestBody WithdrawRequest withdrawRequest) throws DomainException {
 
 		return accountService.withdraw(withdrawRequest);
@@ -61,6 +64,7 @@ public class AccountController {
 	@Logging
 	@PostMapping("/deposit")
 	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
 	public DepositResponse deposit(@RequestBody DepositRequest depositRequest) throws DomainException {
 
 		return accountService.deposit(depositRequest);
@@ -69,6 +73,7 @@ public class AccountController {
 	@Logging
 	@PostMapping("/balance")
 	@ResponseStatus(HttpStatus.OK)
+	@ResponseBody
 	public BalanceResponse balance(@RequestBody BalanceRequest balanceRequest) throws DomainException {
 
 		return accountService.getBalance(balanceRequest);

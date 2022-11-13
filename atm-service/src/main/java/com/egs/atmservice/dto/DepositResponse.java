@@ -7,15 +7,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 
-@Data
 @Builder
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class DepositResponse {
 
 	private Long balance;
 	private Long depositedAmount;
 	private Long accountId;
-	private Long cardNumber;
 
 }

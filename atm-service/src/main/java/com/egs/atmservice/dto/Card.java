@@ -3,6 +3,7 @@ package com.egs.atmservice.dto;
 
 import java.util.Date;
 
+import com.egs.atmservice.common.dto.CommonResponse;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Card {
+public class Card extends CommonResponse {
 
 	private Long cardNumber;
 	@JsonFormat(pattern = "yyyy-mm-dd")
