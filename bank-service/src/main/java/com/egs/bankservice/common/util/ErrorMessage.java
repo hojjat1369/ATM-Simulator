@@ -19,10 +19,13 @@ public class ErrorMessage {
 	public static final String AUTHENTICATION_VALUE_IS_MANDATORY = "Authentication value is mandatory!";
 	public static final String ACCOUNT_NOT_FOUND = "Account not found!";
 	public static final String CARD_NOT_FOUND = "Card not found!";
+	public static final String CARD_IS_BLOCKED = "Card id blocked!";
 	public static final String INVALID_CARD = "Card is invalid!";
+	public static final String INVALID_CARD_NUMBER = "Card number is invalid!";
 	public static final String EXPIRED_CARD = "Card is expired!";
 	public static final String INVALID_PIN = "Pin is invalid!";
 	public static final String INVALID_FINGERPRINT = "Fingerprint is not correct!";
 	public static final String INSUFFICIENT_BALANCE = "Insufficient Balance!";
+	public static final String INTERNAL_ERROR = "Internal error!";
 
 }

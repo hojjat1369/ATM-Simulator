@@ -2,9 +2,12 @@ package com.egs.atmservice.common.util;
 
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import com.egs.atmservice.common.exception.BankServiceException;
+import com.egs.atmservice.common.exception.DomainException;
 import com.egs.atmservice.dto.AccountResponse;
 import com.egs.atmservice.dto.AuthenticateCardRequest;
 import com.egs.atmservice.dto.BalanceRequest;
@@ -25,43 +28,63 @@ public class BankServiceGatewayImpl {
 	private static final String BASE_URL = "http://localhost:8081/api";
 
 	@CircuitBreaker(name = "atmService", fallbackMethod = "bankServiceFailed")
-	public CheckCardResponse checkCard(CheckCardRequest request) {
+	public CheckCardResponse checkCard(CheckCardRequest request) throws DomainException {
 
 		return restTemplate.postForObject(getCheckCardUrl(), request, CheckCardResponse.class);
 	}
 
 	@CircuitBreaker(name = "atmService", fallbackMethod = "accountServiceFailed")
-	public AccountResponse authenticateCard(AuthenticateCardRequest request) {
+	public AccountResponse authenticateCard(AuthenticateCardRequest request) throws DomainException {
 
 		return restTemplate.postForObject(getAuthenticateCardUrl(), request, AccountResponse.class);
 	}
 
 	@CircuitBreaker(name = "atmService", fallbackMethod = "accountServiceFailed")
-	public AccountResponse withdraw(WithdrawRequest request) {
+	public AccountResponse withdraw(WithdrawRequest request) throws DomainException {
 
 		return restTemplate.postForObject(getWithdrawUrl(), request, AccountResponse.class);
 	}
 
 	@CircuitBreaker(name = "atmService", fallbackMethod = "accountServiceFailed")
-	public AccountResponse deposit(DepositRequest request) {
+	public AccountResponse deposit(DepositRequest request) throws DomainException {
 
 		return restTemplate.postForObject(getDepositUrl(), request, AccountResponse.class);
 	}
 
 	@CircuitBreaker(name = "atmService", fallbackMethod = "accountServiceFailed")
-	public AccountResponse balance(BalanceRequest request) {
+	public AccountResponse balance(BalanceRequest request) throws DomainException {
 
 		return restTemplate.postForObject(getBalanceUrl(), request, AccountResponse.class);
 	}
 
-	public CheckCardResponse bankServiceFailed(Exception e) throws BankServiceException {
+	public CheckCardResponse bankServiceFailed(ResourceAccessException e) throws BankServiceException {
 
 		throw new BankServiceException();
 	}
 
-	public AccountResponse accountServiceFailed(Exception e) throws BankServiceException {
+	public CheckCardResponse bankServiceFailed(HttpClientErrorException e) throws DomainException {
+
+		throw new DomainException(e.getMessage());
+	}
+
+	public CheckCardResponse bankServiceFailed(Exception e) throws DomainException {
+
+		throw new DomainException(e.getMessage());
+	}
+
+	public AccountResponse accountServiceFailed(ResourceAccessException e) throws BankServiceException {
 
 		throw new BankServiceException();
+	}
+
+	public AccountResponse accountServiceFailed(HttpClientErrorException e) throws DomainException {
+
+		throw new DomainException(e.getMessage());
+	}
+
+	public AccountResponse accountServiceFailed(Exception e) throws DomainException {
+
+		throw new DomainException(e.getMessage());
 	}
 
 	private String getCheckCardUrl() {

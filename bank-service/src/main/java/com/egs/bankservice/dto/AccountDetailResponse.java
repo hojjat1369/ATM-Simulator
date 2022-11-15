@@ -1,7 +1,5 @@
-package com.egs.atmservice.dto;
+package com.egs.bankservice.dto;
 
-
-import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,11 +11,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CardRequest {
+public class AccountDetailResponse {
 
 	private Long cardNumber;
-	private Long cvv2;
-	private Date expireDate;
+	private Long balance;
 	private Long accountId;
 
 }

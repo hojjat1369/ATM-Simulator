@@ -39,7 +39,7 @@ public class AccountService {
 		Account account = Account.builder().lastName(request.getLastName()).name(request.getName()).balance(request.getBalance()).authMethod(preferredAuthMethod).build();
 		repository.save(account);
 		log.info("account {} is saved.", account.getId());
-		return AccountResponse.builder().balance(account.getBalance()).accountId(account.getId()).build();
+		return AccountResponse.builder().balance(account.getBalance()).accountId(account.getId()).authenticationType(preferredAuthMethod.getAuthType()).build();
 	}
 
 	public Account getAccount(Long id) throws DomainException {
@@ -62,7 +62,12 @@ public class AccountService {
 			balance = balance - withdrawRequest.getAmount();
 			account.setBalance(balance);
 			repository.save(account);
-			return AccountResponse.builder().balance(account.getBalance()).accountId(account.getId()).cardNumber(card.getCardNumber()).build();
+			return AccountResponse	.builder()
+									.balance(account.getBalance())
+									.accountId(account.getId())
+									.cardNumber(card.getCardNumber())
+									.authenticationType(card.getAccount().getAuthMethod().getAuthType())
+									.build();
 		}
 		throw new DomainException(ErrorMessage.INSUFFICIENT_BALANCE);
 	}
@@ -73,18 +78,28 @@ public class AccountService {
 		Account account = card.getAccount();
 		account.setBalance(account.getBalance() + depositRequest.getAmount());
 		repository.save(account);
-		return AccountResponse.builder().balance(account.getBalance()).accountId(account.getId()).cardNumber(card.getCardNumber()).build();
+		return AccountResponse	.builder()
+								.balance(account.getBalance())
+								.accountId(account.getId())
+								.cardNumber(card.getCardNumber())
+								.authenticationType(card.getAccount().getAuthMethod().getAuthType())
+								.build();
 	}
 
 	public AccountResponse getBalance(BalanceRequest balanceRequest) throws DomainException {
 
 		Card card = cardService.getCardByCardNumber(balanceRequest.getCardNumber());
 		Account account = card.getAccount();
-		return AccountResponse.builder().balance(account.getBalance()).accountId(account.getId()).cardNumber(card.getCardNumber()).build();
+		return AccountResponse	.builder()
+								.balance(account.getBalance())
+								.accountId(account.getId())
+								.cardNumber(card.getCardNumber())
+								.authenticationType(card.getAccount().getAuthMethod().getAuthType())
+								.build();
 	}
 
 	private AccountResponse mapToAccountResponse(Account account) {
 
-		return AccountResponse.builder().balance(account.getBalance()).build();
+		return AccountResponse.builder().balance(account.getBalance()).authenticationType(account.getAuthMethod().getAuthType()).build();
 	}
 }

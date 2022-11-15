@@ -34,8 +34,20 @@ public class Card extends AbstractEntity {
 	@Column(nullable = false)
 	private Date expireDate;
 
+	private Boolean blocked;
+	@Column(name = "verify_error_count")
+	private Integer verifyErrorCount;
+
 	@OneToOne
 	@JoinColumn(name = "account_fk")
 	private Account account;
+
+	public void incrementErrorCount() {
+
+		if (verifyErrorCount == null){
+			verifyErrorCount = 0;
+		}
+		verifyErrorCount = verifyErrorCount + 1;
+	}
 
 }

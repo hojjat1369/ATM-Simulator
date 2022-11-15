@@ -6,7 +6,7 @@ public class CardUtil {
 	// Main Method
 	public static void main(String[] args) {
 
-		long number = 5196081888500645L;
+		long number = 5329933310400697l;
 
 		System.out.println(number + " is " + (isValid(number) ? "valid" : "invalid"));
 	}

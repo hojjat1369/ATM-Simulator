@@ -17,6 +17,7 @@ import com.egs.bankservice.dto.AuthenticateCardRequest;
 import com.egs.bankservice.dto.CardRequest;
 import com.egs.bankservice.dto.CardResponse;
 import com.egs.bankservice.dto.CheckCardRequest;
+import com.egs.bankservice.dto.CheckCardResponse;
 import com.egs.bankservice.service.AccountService;
 import com.egs.bankservice.service.CardService;
 
@@ -44,7 +45,7 @@ public class CardController {
 	@PostMapping("/check")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public CardResponse checkCard(@Valid @RequestBody CheckCardRequest checkCardRequest) throws DomainException {
+	public CheckCardResponse checkCard(@Valid @RequestBody CheckCardRequest checkCardRequest) throws DomainException {
 
 		return cardService.checkCard(checkCardRequest);
 	}
@@ -53,7 +54,7 @@ public class CardController {
 	@PostMapping("/authenticate")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public CardResponse authenticateCard(@Valid @RequestBody AuthenticateCardRequest authRequest) throws DomainException {
+	public CheckCardResponse authenticateCard(@Valid @RequestBody AuthenticateCardRequest authRequest) throws DomainException {
 
 		return cardService.authenticateCard(authRequest);
 	}

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.egs.atmservice.common.aspect.Logging;
 import com.egs.atmservice.common.exception.AuthenticateException;
+import com.egs.atmservice.common.exception.DomainException;
 import com.egs.atmservice.common.util.BankServiceGatewayImpl;
 import com.egs.atmservice.common.util.ErrorMessage;
 import com.egs.atmservice.dto.AccountResponse;
@@ -41,7 +42,7 @@ public class AtmController {
 	@PostMapping("/verify")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public CheckCardResponse verifyCard(@Valid @RequestBody CheckCardRequest checkCardRequest, HttpServletRequest request) {
+	public CheckCardResponse verifyCard(@Valid @RequestBody CheckCardRequest checkCardRequest, HttpServletRequest request) throws DomainException {
 
 		CheckCardResponse checkCardResponse = bankService.checkCard(checkCardRequest);
 		initializeSession(request, checkCardResponse.getCardNumber());
@@ -52,7 +53,7 @@ public class AtmController {
 	@PostMapping("/login")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public AccountResponse login(@Valid @RequestBody AuthenticateCardRequest authenticateCardRequest, HttpServletRequest request) throws AuthenticateException {
+	public AccountResponse login(@Valid @RequestBody AuthenticateCardRequest authenticateCardRequest, HttpServletRequest request) throws AuthenticateException, DomainException {
 
 		UserSession userSession = getUserSessionInfo(request.getSession(), authenticateCardRequest.getCardNumber());
 		checkVerifiedCard(userSession);
@@ -65,7 +66,7 @@ public class AtmController {
 	@PostMapping("/withdraw")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public AccountResponse withdraw(@Valid @RequestBody WithdrawRequest withdrawRequest, HttpServletRequest request) throws AuthenticateException {
+	public AccountResponse withdraw(@Valid @RequestBody WithdrawRequest withdrawRequest, HttpServletRequest request) throws AuthenticateException, DomainException {
 
 		UserSession userSessionInfo = getUserSessionInfo(request.getSession(), withdrawRequest.getCardNumber());
 		checkAuthnticatedCard(userSessionInfo);
@@ -76,7 +77,7 @@ public class AtmController {
 	@PostMapping("/deposit")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public AccountResponse deposit(@Valid @RequestBody DepositRequest depositRequest, HttpServletRequest request) throws AuthenticateException {
+	public AccountResponse deposit(@Valid @RequestBody DepositRequest depositRequest, HttpServletRequest request) throws AuthenticateException, DomainException {
 
 		UserSession userSessionInfo = getUserSessionInfo(request.getSession(), depositRequest.getCardNumber());
 		checkAuthnticatedCard(userSessionInfo);
@@ -87,7 +88,7 @@ public class AtmController {
 	@PostMapping("/balance")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public AccountResponse balance(@Valid @RequestBody BalanceRequest balanceRequest, HttpServletRequest request) throws AuthenticateException {
+	public AccountResponse balance(@Valid @RequestBody BalanceRequest balanceRequest, HttpServletRequest request) throws AuthenticateException, DomainException {
 
 		UserSession userSessionInfo = getUserSessionInfo(request.getSession(), balanceRequest.getCardNumber());
 		checkAuthnticatedCard(userSessionInfo);

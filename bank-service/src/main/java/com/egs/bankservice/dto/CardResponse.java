@@ -3,30 +3,24 @@ package com.egs.bankservice.dto;
 
 import java.util.Date;
 
-import com.egs.bankservice.common.dto.CommonRequest;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 
+@Data
 @Builder
-@Getter
-@Setter
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class CardResponse extends CommonRequest {
+public class CardResponse {
 
-	private static final long serialVersionUID = 471803407402512569L;
+	private Long id;
 	private Long cardNumber;
 	@JsonFormat(pattern = "yyyy-mm-dd")
 	private Date expireDate;
 	private Long accountId;
-	private Long id;
 
 }

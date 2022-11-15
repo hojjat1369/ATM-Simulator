@@ -19,5 +19,7 @@ public class CheckCardRequest {
 
 	@NotNull(message = ErrorMessage.CARD_NUMBER_IS_MANDATORY)
 	private Long cardNumber;
+	@NotNull(message = ErrorMessage.CVV2_IS_MANDATORY)
+	private Long cvv2;
 
 }

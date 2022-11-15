@@ -42,7 +42,7 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public @ResponseBody ErrorResponse handleException(AuthenticateException ex) {
 
-		return new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
+		return new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), ErrorMessage.UNAUTHORIZED_CARD);
 	}
 
 	@ExceptionHandler(value = DomainException.class)

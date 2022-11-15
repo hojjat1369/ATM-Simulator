@@ -36,6 +36,7 @@ public class AccountController {
 	@Logging
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
+	@ResponseBody
 	public AccountResponse createAccount(@Valid @RequestBody AccountRequest accountRequest) {
 
 		return accountService.createAccount(accountRequest);
