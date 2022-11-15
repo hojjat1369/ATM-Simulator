@@ -19,11 +19,8 @@ import com.egs.bankservice.common.exception.DomainException;
 import com.egs.bankservice.dto.AccountRequest;
 import com.egs.bankservice.dto.AccountResponse;
 import com.egs.bankservice.dto.BalanceRequest;
-import com.egs.bankservice.dto.BalanceResponse;
 import com.egs.bankservice.dto.DepositRequest;
-import com.egs.bankservice.dto.DepositResponse;
 import com.egs.bankservice.dto.WithdrawRequest;
-import com.egs.bankservice.dto.WithdrawResponse;
 import com.egs.bankservice.service.AccountService;
 
 import lombok.RequiredArgsConstructor;
@@ -39,9 +36,9 @@ public class AccountController {
 	@Logging
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public void createAccount(@Valid @RequestBody AccountRequest accountRequest) {
+	public AccountResponse createAccount(@Valid @RequestBody AccountRequest accountRequest) {
 
-		accountService.createAccount(accountRequest);
+		return accountService.createAccount(accountRequest);
 	}
 
 	@GetMapping
@@ -56,7 +53,7 @@ public class AccountController {
 	@PostMapping("/withdraw")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public WithdrawResponse withdraw(@RequestBody WithdrawRequest withdrawRequest) throws DomainException {
+	public AccountResponse withdraw(@Valid @RequestBody WithdrawRequest withdrawRequest) throws DomainException {
 
 		return accountService.withdraw(withdrawRequest);
 	}
@@ -65,7 +62,7 @@ public class AccountController {
 	@PostMapping("/deposit")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public DepositResponse deposit(@RequestBody DepositRequest depositRequest) throws DomainException {
+	public AccountResponse deposit(@Valid @RequestBody DepositRequest depositRequest) throws DomainException {
 
 		return accountService.deposit(depositRequest);
 	}
@@ -74,7 +71,7 @@ public class AccountController {
 	@PostMapping("/balance")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public BalanceResponse balance(@RequestBody BalanceRequest balanceRequest) throws DomainException {
+	public AccountResponse balance(@Valid @RequestBody BalanceRequest balanceRequest) throws DomainException {
 
 		return accountService.getBalance(balanceRequest);
 	}

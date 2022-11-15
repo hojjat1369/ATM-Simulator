@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import com.egs.atmservice.common.dto.ErrorResponse;
 import com.egs.atmservice.common.exception.AuthenticateException;
+import com.egs.atmservice.common.exception.BankServiceException;
 import com.egs.atmservice.common.exception.DomainException;
 
 
@@ -51,12 +52,19 @@ public class ValidationHandler extends ResponseEntityExceptionHandler {
 		return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
 	}
 
+	@ExceptionHandler(value = BankServiceException.class)
+	@ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+	public @ResponseBody ErrorResponse handleException(BankServiceException ex) {
+
+		return new ErrorResponse(HttpStatus.SERVICE_UNAVAILABLE.value(), ErrorMessage.BANK_ID_DOWN);
+	}
+
 	@ExceptionHandler(value = Exception.class)
 	@ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
 	public @ResponseBody ErrorResponse handleException(Exception ex) {
 
 		logger.error("", ex);
-		return new ErrorResponse(HttpStatus.SERVICE_UNAVAILABLE.value(), ErrorMessage.BANK_ID_DOWN);
+		return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), ErrorMessage.INTERNAL_ERROR);
 	}
 
 }

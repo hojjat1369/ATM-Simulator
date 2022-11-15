@@ -13,13 +13,11 @@ import com.egs.bankservice.common.util.ErrorMessage;
 import com.egs.bankservice.dto.AccountRequest;
 import com.egs.bankservice.dto.AccountResponse;
 import com.egs.bankservice.dto.BalanceRequest;
-import com.egs.bankservice.dto.BalanceResponse;
 import com.egs.bankservice.dto.DepositRequest;
-import com.egs.bankservice.dto.DepositResponse;
 import com.egs.bankservice.dto.WithdrawRequest;
-import com.egs.bankservice.dto.WithdrawResponse;
 import com.egs.bankservice.entity.Account;
 import com.egs.bankservice.entity.AuthenticationMethod;
+import com.egs.bankservice.entity.Card;
 import com.egs.bankservice.repository.AccountRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -33,14 +31,15 @@ public class AccountService {
 
 	private final AccountRepository repository;
 	private final AuthenticationMethodService autMethodService;
+	private final CardService cardService;
 
-	public Account createAccount(@Valid AccountRequest request) {
+	public AccountResponse createAccount(@Valid AccountRequest request) {
 
 		AuthenticationMethod preferredAuthMethod = autMethodService.createAuthMethod(request.getAuthRequest());
 		Account account = Account.builder().lastName(request.getLastName()).name(request.getName()).balance(request.getBalance()).authMethod(preferredAuthMethod).build();
 		repository.save(account);
 		log.info("account {} is saved.", account.getId());
-		return account;
+		return AccountResponse.builder().balance(account.getBalance()).accountId(account.getId()).build();
 	}
 
 	public Account getAccount(Long id) throws DomainException {
@@ -54,35 +53,38 @@ public class AccountService {
 		return accounts.stream().map(this::mapToAccountResponse).collect(Collectors.toList());
 	}
 
-	public WithdrawResponse withdraw(WithdrawRequest withdrawRequest) throws DomainException {
+	public AccountResponse withdraw(WithdrawRequest withdrawRequest) throws DomainException {
 
-		Account account = getAccount(withdrawRequest.getAccountId());
+		Card card = cardService.getCardByCardNumber(withdrawRequest.getCardNumber());
+		Account account = card.getAccount();
 		Long balance = account.getBalance();
 		if (balance >= withdrawRequest.getAmount()){
 			balance = balance - withdrawRequest.getAmount();
 			account.setBalance(balance);
 			repository.save(account);
-			return WithdrawResponse.builder().accountId(account.getId()).balance(account.getBalance()).withdrawnAmount(withdrawRequest.getAmount()).build();
+			return AccountResponse.builder().balance(account.getBalance()).accountId(account.getId()).cardNumber(card.getCardNumber()).build();
 		}
 		throw new DomainException(ErrorMessage.INSUFFICIENT_BALANCE);
 	}
 
-	public DepositResponse deposit(DepositRequest depositRequest) throws DomainException {
+	public AccountResponse deposit(DepositRequest depositRequest) throws DomainException {
 
-		Account account = getAccount(depositRequest.getAccountId());
+		Card card = cardService.getCardByCardNumber(depositRequest.getCardNumber());
+		Account account = card.getAccount();
 		account.setBalance(account.getBalance() + depositRequest.getAmount());
 		repository.save(account);
-		return DepositResponse.builder().accountId(account.getId()).balance(account.getBalance()).depositedAmount(depositRequest.getAmount()).build();
+		return AccountResponse.builder().balance(account.getBalance()).accountId(account.getId()).cardNumber(card.getCardNumber()).build();
 	}
 
-	public BalanceResponse getBalance(BalanceRequest balanceRequest) throws DomainException {
+	public AccountResponse getBalance(BalanceRequest balanceRequest) throws DomainException {
 
-		Account account = getAccount(balanceRequest.getAccountId());
-		return BalanceResponse.builder().accountId(account.getId()).balance(account.getBalance()).build();
+		Card card = cardService.getCardByCardNumber(balanceRequest.getCardNumber());
+		Account account = card.getAccount();
+		return AccountResponse.builder().balance(account.getBalance()).accountId(account.getId()).cardNumber(card.getCardNumber()).build();
 	}
 
 	private AccountResponse mapToAccountResponse(Account account) {
 
-		return AccountResponse.builder().balance(account.getBalance()).name(account.getName()).lastName(account.getLastName()).build();
+		return AccountResponse.builder().balance(account.getBalance()).build();
 	}
 }

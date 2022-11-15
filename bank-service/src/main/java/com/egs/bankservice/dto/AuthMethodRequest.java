@@ -4,6 +4,7 @@ package com.egs.bankservice.dto;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.egs.bankservice.common.dto.CommonRequest;
 import com.egs.bankservice.common.util.ErrorMessage;
 import com.egs.bankservice.enums.AuthenticationType;
 
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthMethodRequest {
+public class AuthMethodRequest extends CommonRequest {
 
 	@NotNull(message = ErrorMessage.AUTHENTICATION_TYPE_IS_MANDATORY)
 	private AuthenticationType authType;

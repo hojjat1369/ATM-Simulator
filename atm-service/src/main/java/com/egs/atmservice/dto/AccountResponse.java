@@ -1,11 +1,6 @@
 package com.egs.atmservice.dto;
 
 
-import java.util.Date;
-
-import com.egs.atmservice.common.dto.CommonResponse;
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,13 +13,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Card extends CommonResponse {
+public class AccountResponse {
 
 	private Long cardNumber;
-	@JsonFormat(pattern = "yyyy-mm-dd")
-	private Date expireDate;
-
+	private Long balance;
 	private Long accountId;
-	private Long id;
 
 }

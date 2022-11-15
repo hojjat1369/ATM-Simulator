@@ -17,6 +17,7 @@ import com.egs.bankservice.dto.AuthenticateCardRequest;
 import com.egs.bankservice.dto.CardRequest;
 import com.egs.bankservice.dto.CardResponse;
 import com.egs.bankservice.dto.CheckCardRequest;
+import com.egs.bankservice.service.AccountService;
 import com.egs.bankservice.service.CardService;
 
 import lombok.RequiredArgsConstructor;
@@ -28,14 +29,15 @@ import lombok.RequiredArgsConstructor;
 public class CardController {
 
 	private final CardService cardService;
+	private final AccountService accountService;
 
 	@Logging
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	@ResponseBody
-	public CardResponse createCard(@RequestBody CardRequest cardRequest) throws DomainException {
+	public CardResponse createCard(@Valid @RequestBody CardRequest cardRequest) throws DomainException {
 
-		return cardService.createCard(cardRequest);
+		return cardService.createCard(cardRequest, accountService.getAccount(cardRequest.getAccountId()));
 	}
 
 	@Logging

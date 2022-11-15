@@ -26,12 +26,10 @@ import lombok.extern.slf4j.Slf4j;
 public class CardService {
 
 	private final CardRepository cardRepository;
-	private final AccountService accountService;
 	private final AuthenticationMethodService authenticationMethodService;
 
-	public CardResponse createCard(CardRequest request) throws DomainException {
+	public CardResponse createCard(CardRequest request, Account account) throws DomainException {
 
-		Account account = accountService.getAccount(request.getAccountId());
 		Card card = Card.builder().cardNumber(request.getCardNumber()).cvv2(request.getCvv2()).expireDate(request.getExpireDate()).account(account).build();
 		cardRepository.save(card);
 		log.info("card {} is saved.", card.getId());

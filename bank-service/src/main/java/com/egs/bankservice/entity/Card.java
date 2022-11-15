@@ -35,7 +35,7 @@ public class Card extends AbstractEntity {
 	private Date expireDate;
 
 	@OneToOne
-	@JoinColumn(name = "user_fk")
+	@JoinColumn(name = "account_fk")
 	private Account account;
 
 }

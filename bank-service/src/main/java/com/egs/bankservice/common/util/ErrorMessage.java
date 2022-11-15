@@ -7,8 +7,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class ErrorMessage {
 
+	public static final String ACCOUNT_IS_MANDATORY = "Account is mandatory!";
+	public static final String CARD_NUMBER_IS_MANDATORY = "Card is mandatory!";
+	public static final String CVV2_IS_MANDATORY = "Cvv2 is mandatory!";
+	public static final String EXPIRE_DATE_IS_MANDATORY = "Expire date is mandatory!";
 	public static final String NAME_IS_MANDATORY = "Name is mandatory!";
 	public static final String LAST_NAME_IS_MANDATORY = "Last name is mandatory!";
+	public static final String AMOUNT_MANDATORY = "Amount is mandatory!";
 	public static final String BALANCE_IS_MANDATORY = "Balance is mandatory!";
 	public static final String AUTHENTICATION_TYPE_IS_MANDATORY = "Authentication type is mandatory!";
 	public static final String AUTHENTICATION_VALUE_IS_MANDATORY = "Authentication value is mandatory!";

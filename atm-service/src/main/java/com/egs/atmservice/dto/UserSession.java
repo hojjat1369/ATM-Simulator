@@ -18,8 +18,6 @@ import lombok.NoArgsConstructor;
 public class UserSession implements Serializable {
 
 	private static final long serialVersionUID = -8471902716978505544L;
-	private String token;
-	private Long accountId;
 	private Long cardNumber;
 	private CardAuthState state;
 }

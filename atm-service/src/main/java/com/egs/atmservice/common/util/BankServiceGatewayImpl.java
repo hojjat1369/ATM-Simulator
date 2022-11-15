@@ -4,17 +4,16 @@ package com.egs.atmservice.common.util;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import com.egs.atmservice.common.exception.DomainException;
+import com.egs.atmservice.common.exception.BankServiceException;
+import com.egs.atmservice.dto.AccountResponse;
 import com.egs.atmservice.dto.AuthenticateCardRequest;
 import com.egs.atmservice.dto.BalanceRequest;
-import com.egs.atmservice.dto.BalanceResponse;
-import com.egs.atmservice.dto.Card;
 import com.egs.atmservice.dto.CheckCardRequest;
+import com.egs.atmservice.dto.CheckCardResponse;
 import com.egs.atmservice.dto.DepositRequest;
-import com.egs.atmservice.dto.DepositResponse;
 import com.egs.atmservice.dto.WithdrawRequest;
-import com.egs.atmservice.dto.WithdrawResponse;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 
 
@@ -25,29 +24,44 @@ public class BankServiceGatewayImpl {
 	private final RestTemplate restTemplate;
 	private static final String BASE_URL = "http://localhost:8081/api";
 
-	public Card checkCard(CheckCardRequest request) {
+	@CircuitBreaker(name = "atmService", fallbackMethod = "bankServiceFailed")
+	public CheckCardResponse checkCard(CheckCardRequest request) {
 
-		return restTemplate.postForObject(getCheckCardUrl(), request, Card.class);
+		return restTemplate.postForObject(getCheckCardUrl(), request, CheckCardResponse.class);
 	}
 
-	public Card authenticateCard(AuthenticateCardRequest request) {
+	@CircuitBreaker(name = "atmService", fallbackMethod = "accountServiceFailed")
+	public AccountResponse authenticateCard(AuthenticateCardRequest request) {
 
-		return restTemplate.postForObject(getAuthenticateCardUrl(), request, Card.class);
+		return restTemplate.postForObject(getAuthenticateCardUrl(), request, AccountResponse.class);
 	}
 
-	public WithdrawResponse withdraw(WithdrawRequest request) {
+	@CircuitBreaker(name = "atmService", fallbackMethod = "accountServiceFailed")
+	public AccountResponse withdraw(WithdrawRequest request) {
 
-		return restTemplate.postForObject(getWithdrawUrl(), request, WithdrawResponse.class);
+		return restTemplate.postForObject(getWithdrawUrl(), request, AccountResponse.class);
 	}
 
-	public DepositResponse deposit(DepositRequest request) {
+	@CircuitBreaker(name = "atmService", fallbackMethod = "accountServiceFailed")
+	public AccountResponse deposit(DepositRequest request) {
 
-		return restTemplate.postForObject(getDepositUrl(), request, DepositResponse.class);
+		return restTemplate.postForObject(getDepositUrl(), request, AccountResponse.class);
 	}
 
-	public BalanceResponse balance(BalanceRequest request) {
+	@CircuitBreaker(name = "atmService", fallbackMethod = "accountServiceFailed")
+	public AccountResponse balance(BalanceRequest request) {
 
-		return restTemplate.postForObject(getBalanceUrl(), request, BalanceResponse.class);
+		return restTemplate.postForObject(getBalanceUrl(), request, AccountResponse.class);
+	}
+
+	public CheckCardResponse bankServiceFailed(Exception e) throws BankServiceException {
+
+		throw new BankServiceException();
+	}
+
+	public AccountResponse accountServiceFailed(Exception e) throws BankServiceException {
+
+		throw new BankServiceException();
 	}
 
 	private String getCheckCardUrl() {
@@ -75,8 +89,4 @@ public class BankServiceGatewayImpl {
 		return BASE_URL + "/account/balance";
 	}
 
-	public void failed() throws DomainException {
-
-		throw new DomainException(ErrorMessage.BANK_ID_DOWN);
-	}
 }

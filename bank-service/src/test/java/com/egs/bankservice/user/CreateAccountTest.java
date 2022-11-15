@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.egs.bankservice.common.exception.DomainException;
 import com.egs.bankservice.dto.AccountRequest;
+import com.egs.bankservice.dto.AccountResponse;
 import com.egs.bankservice.dto.AuthMethodRequest;
 import com.egs.bankservice.entity.Account;
 import com.egs.bankservice.entity.AuthenticationMethod;
@@ -39,9 +40,6 @@ public class CreateAccountTest {
 	private AccountRequest request;
 	private AuthMethodRequest authRequest;
 
-//	@Rule
-//	public ExpectedException thrown = ExpectedException.none();
-
 	@Before
 	public void setup() {
 
@@ -52,21 +50,13 @@ public class CreateAccountTest {
 	}
 
 	@Test
-	public void nullName() throws DomainException {
-
-		request.setName(null);
-		accountService.createAccount(request);
-		Assert.assertThrows("test", DomainException.class, null);
-	}
-
-	@Test
 	public void ok() throws DomainException {
 
 		Mockito.when(accountRepository.save(Mockito.any(Account.class))).thenReturn(getAccount(request));
 		Mockito.when(authMethodService.createAuthMethod(Mockito.any(AuthMethodRequest.class))).thenReturn(getAuthenticationMethod(request));
-		Account account = accountService.createAccount(request);
+		AccountResponse account = accountService.createAccount(request);
 		Assert.assertNotNull(account);
-		Assert.assertEquals(account.getName(), request.getName());
+		Assert.assertEquals(account.getBalance(), request.getBalance());
 
 	}
 
